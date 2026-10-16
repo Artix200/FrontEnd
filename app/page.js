@@ -13,7 +13,7 @@ export default function Home() {
       <HeaderReactCreate />
       <div className="Pokemon_grid_container">
         {pokemons.map(({ id, name, types, img }) => (
-          <PokemonCard key={id} name={name} types={types} img={img} />
+          <PokemonCard key={id} name={name} types={types} img={img} id={id} />
         ))}
       </div>
     </div>
