@@ -1,21 +1,18 @@
-import PokemonCard from '@/app/components/PokemonCard';
 import { pokemons } from '@/app/data/pokemon';
-import Link from 'next/link';
+import PokemonCardWithDetails from '@/app/components/PokemonDetails';
 
 export default async function PokemonDetails({ params }) {
   const { id } = await params;
   const choosen_pokemon = pokemons.filter(
     (pokemon) => pokemon.id.toString() === id,
   );
-  console.log(choosen_pokemon);
   return (
     <div>
-      <PokemonCard
+      <PokemonCardWithDetails
         name={choosen_pokemon[0].name}
-        img={choosen_pokemon[0].id}
         types={choosen_pokemon[0].types}
-      ></PokemonCard>
-      <Link href="/">Strona główna</Link>
+        img={choosen_pokemon[0].img}
+      ></PokemonCardWithDetails>
     </div>
   );
 }
