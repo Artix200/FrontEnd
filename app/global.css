@@ -1,0 +1,19 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #f3e6d5;
+}
+
+.container_main {
+  margin: 0 auto;
+  width: 80%;
+}
+
+.pokemon_grid_container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}

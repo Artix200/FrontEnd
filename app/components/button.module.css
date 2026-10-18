@@ -1,0 +1,8 @@
+.catch_button {
+  width: 50%;
+  height: 20%;
+  border-radius: 5px;
+  background-color: #800020;
+  border: #800020;
+  color: white;
+}
