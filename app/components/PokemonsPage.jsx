@@ -7,7 +7,8 @@ import types from '../data/types';
 
 export default function PokemonSection() {
   const [searchPokemon, setSearchPokemon] = useState('');
-  const [typesPokemon, setTypesPokemon] = useState([]);
+  const [typesPokemons, setTypesPokemon] = useState([]);
+  const [catchedPokemons, setCatchedPokemons] = useState([]);
 
   function handleInputChange(e) {
     setSearchPokemon(e.target.value);
@@ -15,19 +16,30 @@ export default function PokemonSection() {
 
   function handleTypesChange(e) {
     const choosenType = e.target.value;
-    if (typesPokemon.includes(choosenType)) {
-      const ArrayWithoutType = typesPokemon.filter(
+    if (typesPokemons.includes(choosenType)) {
+      const ArrayWithoutType = typesPokemons.filter(
         (type) => type !== choosenType,
       );
       setTypesPokemon(ArrayWithoutType);
     } else {
-      setTypesPokemon([...typesPokemon, choosenType]);
+      setTypesPokemon([...typesPokemons, choosenType]);
+    }
+  }
+
+  function handleAdditionToCatched(catch_name) {
+    if (catchedPokemons.includes(catch_name)) {
+      const ArrayWithoutPokemonName = catchedPokemons.filter(
+        (name) => name !== catch_name,
+      );
+      setCatchedPokemons(ArrayWithoutPokemonName);
+    } else {
+      setCatchedPokemons([...catchedPokemons, catch_name]);
     }
   }
   const filterList = pokemons
     .filter((pokemon) => pokemon.name.includes(searchPokemon))
     .filter((pokemon) => {
-      const checkFilterTypes = typesPokemon.reduce((acc, cur) => {
+      const checkFilterTypes = typesPokemons.reduce((acc, cur) => {
         pokemon.types.includes(cur) ? acc.push(true) : acc.push(false);
         return acc;
       }, []);
@@ -61,7 +73,15 @@ export default function PokemonSection() {
       </form>
       <div className="pokemon_grid_container">
         {filterList.map(({ id, name, types, img }) => (
-          <PokemonCard key={id} name={name} types={types} img={img} id={id} />
+          <PokemonCard
+            key={id}
+            name={name}
+            types={types}
+            img={img}
+            id={id}
+            catched={catchedPokemons.includes(name)}
+            handleAdditionToCatched={handleAdditionToCatched}
+          />
         ))}
       </div>
       {isEmpty && <div>Nie ma żadnych pokemonów o takiej nazwie</div>}

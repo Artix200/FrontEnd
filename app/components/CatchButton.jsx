@@ -1,11 +1,11 @@
 'use client';
 import styles from './button.module.css';
 
-export default function CatchButton({ name }) {
+export default function CatchButton({ name, handleAdditionToCatched }) {
   return (
     <button
       className={styles.catch_button}
-      onClick={() => alert(`Złapany pokemon ${name}`)}
+      onClick={() => handleAdditionToCatched(name)}
     >
       Złap mnie
     </button>

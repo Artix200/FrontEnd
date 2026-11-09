@@ -4,9 +4,17 @@ import styles from './pokemon_card.module.css';
 import mapping from './mapping_function_for_color';
 import styles2 from './types.module.css';
 
-export default function PokemonCard({ name, img, types, id }) {
+export default function PokemonCard({
+  name,
+  img,
+  types,
+  id,
+  catched,
+  handleAdditionToCatched,
+}) {
   return (
     <div className={styles.card}>
+      {catched ? '★' : '☆'}
       <Link href={`/pokemon/${id}`}>
         <div>{name}</div>
       </Link>
@@ -21,7 +29,10 @@ export default function PokemonCard({ name, img, types, id }) {
           );
         })}
       </div>
-      <CatchButton name={name}></CatchButton>
+      <CatchButton
+        name={name}
+        handleAdditionToCatched={handleAdditionToCatched}
+      ></CatchButton>
     </div>
   );
 }
