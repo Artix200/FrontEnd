@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { pokemons } from '../data/pokemon';
 import PokemonCard from './PokemonCard';
 import types from '../data/types';
@@ -8,7 +8,20 @@ import types from '../data/types';
 export default function PokemonSection() {
   const [searchPokemon, setSearchPokemon] = useState('');
   const [typesPokemons, setTypesPokemon] = useState([]);
-  const [catchedPokemons, setCatchedPokemons] = useState([]);
+
+  // Fix hydration problem by dwubiegunowe renderowanie
+  const [catchedPokemons, setCatchedPokemons] = useState(() => {
+    try {
+      const catchData = localStorage.getItem('catch');
+      return catchData ? JSON.parse(catchData) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem('catch', JSON.stringify(catchedPokemons));
+  }, [catchedPokemons.length]);
 
   function handleInputChange(e) {
     setSearchPokemon(e.target.value);
@@ -52,6 +65,7 @@ export default function PokemonSection() {
       return validPokemon;
     });
   const isEmpty = filterList.length == 0;
+
   return (
     <>
       <div>
