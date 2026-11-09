@@ -37,8 +37,8 @@ export const pokemons = [
   },
   {
     id: 94,
-    name: 'Bulbasaur',
-    types: ['Grass', 'Poison'],
+    name: 'Gengar',
+    types: ['Ghost', ' Poison'],
     img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png`,
   },
   {
