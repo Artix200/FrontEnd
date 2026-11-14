@@ -1,29 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { pokemons } from '../data/pokemon';
 import PokemonCard from './PokemonCard';
 import types from '../data/types';
+import { usePokemonCatch } from '../hooks/usePokemonCatch';
 
 export default function PokemonSection() {
   const [searchPokemon, setSearchPokemon] = useState('');
   const [typesPokemons, setTypesPokemon] = useState([]);
 
-  // Fix hydration problem by dwubiegunowe renderowanie
-  const [catchedPokemons, setCatchedPokemons] = useState([]);
-  const [loaded, setLoaded] = useState(false);
+  const [catchedPokemons, handleAdditionToCatched] = usePokemonCatch();
+
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem('catch');
-      if (stored) setCatchedPokemons(JSON.parse(stored));
-    } catch {}
-    setLoaded(true);
+    inputRef.current.focus();
   }, []);
-
-  useEffect(() => {
-    if (loaded) localStorage.setItem('catch', JSON.stringify(catchedPokemons));
-  }, [catchedPokemons.length]);
 
   function handleInputChange(e) {
     setSearchPokemon(e.target.value);
@@ -41,29 +34,20 @@ export default function PokemonSection() {
     }
   }
 
-  function handleAdditionToCatched(catch_name) {
-    if (catchedPokemons.includes(catch_name)) {
-      const ArrayWithoutPokemonName = catchedPokemons.filter(
-        (name) => name !== catch_name,
-      );
-      setCatchedPokemons(ArrayWithoutPokemonName);
-    } else {
-      setCatchedPokemons([...catchedPokemons, catch_name]);
-    }
-  }
   const filterList = pokemons
     .filter((pokemon) => pokemon.name.includes(searchPokemon))
     .filter((pokemon) => {
+      //true and false array depends if given pokemons has this type
       const checkFilterTypes = typesPokemons.reduce((acc, cur) => {
         pokemon.types.includes(cur) ? acc.push(true) : acc.push(false);
         return acc;
       }, []);
+      console.log(checkFilterTypes);
+      // do pokemon has all choosen types , if found false it dosent have at least one
       const validPokemon =
-        checkFilterTypes.length === 0
-          ? true
-          : checkFilterTypes.includes(true)
-            ? true
-            : false;
+        checkFilterTypes.find((value) => value === false) === false
+          ? false
+          : true;
       return validPokemon;
     });
   const isEmpty = filterList.length == 0;
@@ -71,7 +55,11 @@ export default function PokemonSection() {
   return (
     <>
       <div>
-        <input value={searchPokemon} onChange={handleInputChange}></input>
+        <input
+          value={searchPokemon}
+          onChange={handleInputChange}
+          ref={inputRef}
+        ></input>
       </div>
       <form>
         {types.map((type) => {
