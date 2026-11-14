@@ -10,17 +10,19 @@ export default function PokemonSection() {
   const [typesPokemons, setTypesPokemon] = useState([]);
 
   // Fix hydration problem by dwubiegunowe renderowanie
-  const [catchedPokemons, setCatchedPokemons] = useState(() => {
-    try {
-      const catchData = localStorage.getItem('catch');
-      return catchData ? JSON.parse(catchData) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [catchedPokemons, setCatchedPokemons] = useState([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('catch', JSON.stringify(catchedPokemons));
+    try {
+      const stored = localStorage.getItem('catch');
+      if (stored) setCatchedPokemons(JSON.parse(stored));
+    } catch {}
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (loaded) localStorage.setItem('catch', JSON.stringify(catchedPokemons));
   }, [catchedPokemons.length]);
 
   function handleInputChange(e) {
